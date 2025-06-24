@@ -6,26 +6,26 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 const items: MenuItem[] = [
         {
-            key: '/home',
+            key: '/',
             label: 'Home',
-            icon: <AppstoreOutlined />,
+            icon: <AppstoreOutlined />
         },
         {
-            key: '/about',
+            key: '/login',
             label: 'About',
             icon: <AppstoreOutlined />,
         },
         {
-            key: '/3',
+            key: '/home',
             label: 'Contact',
             icon: <AppstoreOutlined />,
         },
     ];
 function Menu() {
-    const onClick: MenuProps['onClick'] = (info) => {
     const navigate = useNavigate();
-    navigate(info.key);
-  };
+    const onClick: MenuProps['onClick'] = (info) => {
+        navigate(info.key);
+    };
   return (
     <AntdMenu 
         onClick={onClick} 

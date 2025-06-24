@@ -6,47 +6,27 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Button, Layout, Sider, theme } from 'antd';
+import { Button, Layout as AntdLayout, theme } from 'antd';
 
+const { Sider } = AntdLayout;
 import Header from '@/layout/Header';
 import Menu from '@/layout/Menu';
 import Content from '@/layout/Content';
 
-const App: React.FC = () => {
+const Layout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   return (
-    <Layout>
+    <AntdLayout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: '1',
-              icon: <UserOutlined />,
-              label: 'nav 1',
-            },
-            {
-              key: '2',
-              icon: <VideoCameraOutlined />,
-              label: 'nav 2',
-            },
-            {
-              key: '3',
-              icon: <UploadOutlined />,
-              label: 'nav 3',
-            },
-          ]}
-        />
+        <Menu />
       </Sider>
-      <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+      <AntdLayout className='!w-[calc(100vw-200px)] h-100vh'>
+        <Header style={{ padding: 0, background: colorBgContainer }} className="w-2000px">
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -69,7 +49,9 @@ const App: React.FC = () => {
         >
           Content
         </Content>
-      </Layout>
-    </Layout>
+      </AntdLayout>
+    </AntdLayout>
   );
 };
+
+export default Layout;

@@ -11,7 +11,7 @@ type FormField = {
     password: string;
 }
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center h-full">
             <h1>Login</h1>
             <Form>
                 <Form.Item<FormField>

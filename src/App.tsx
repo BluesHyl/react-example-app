@@ -1,15 +1,32 @@
-import { useState } from 'react'
-import Login from '@/pages/Login/Index.tsx'
-import { RouterProvider } from 'react-router'
-import { router } from '@/router/index.ts'
+import React from 'react';
+import { RouterProvider, createBrowserRouter } from 'react-router';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/locale/zh_CN';
+import routes from './router';
+import AuthGuard from './components/AuthGuard';
 
-function App() {
+// 创建路由配置
+const router = createBrowserRouter(
+  routes.map(route => ({
+    ...route,
+    element: <AuthGuard>{route.element}</AuthGuard>,
+  }))
+);
 
+const App: React.FC = () => {
   return (
-    <>
+    <ConfigProvider
+      locale={zhCN}
+      theme={{
+        token: {
+          colorPrimary: '#1890ff',
+          borderRadius: 4,
+        },
+      }}
+    >
       <RouterProvider router={router} />
-    </>
-  )
-}
+    </ConfigProvider>
+  );
+};
 
-export default App
+export default App;

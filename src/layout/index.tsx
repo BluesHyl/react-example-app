@@ -11,6 +11,8 @@ import {
 } from '@ant-design/icons';
 import { useUserStore } from '@/store/user';
 
+import withAuth from '@/utils/withAuth';
+
 const { Header, Sider } = Layout;
 import Content from './components/Content';
 
@@ -155,4 +157,4 @@ const MainLayout: React.FC = () => {
   );
 };
 
-export default MainLayout;
+export default withAuth(MainLayout);

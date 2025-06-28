@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useUserStore } from '@/store/user';
 
 interface LoginForm {
@@ -12,6 +12,7 @@ interface LoginForm {
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUser } = useUserStore();
 
   // 模拟登录请求
@@ -39,7 +40,9 @@ const Login: React.FC = () => {
       const user = await mockLogin(values);
       setUser(user);
       message.success('登录成功');
-      navigate('/home');
+      console.log(location)
+      const path = location.state || '/home';
+      navigate(path);
     } catch (error: any) {
       message.error(error.message || '登录失败');
     } finally {

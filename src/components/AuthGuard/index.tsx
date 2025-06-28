@@ -7,6 +7,7 @@ interface AuthGuardProps {
 }
 
 const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
+  console.log('AuthGuard渲染了');
   const location = useLocation();
   const { user } = useUserStore();
 

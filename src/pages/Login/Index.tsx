@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate, useLocation, Navigate  } from 'react-router';
 import { useUserStore } from '@/store/user';
 
 interface LoginForm {
@@ -13,7 +13,11 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { setUser } = useUserStore();
+  const { user, setUser } = useUserStore();
+  // 如果用户已登录，直接重定向到首页
+  if (user) {
+    return <Navigate to="/home" replace />;
+  }
 
   // 模拟登录请求
   const mockLogin = async (data: LoginForm): Promise<any> => {
@@ -40,7 +44,6 @@ const Login: React.FC = () => {
       const user = await mockLogin(values);
       setUser(user);
       message.success('登录成功');
-      console.log(location)
       const path = location.state || '/home';
       navigate(path);
     } catch (error: any) {

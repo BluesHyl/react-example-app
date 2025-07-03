@@ -1,47 +1,25 @@
 import React from 'react';
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate, redirect } from 'react-router';
 import MainLayout from '@/layout';
 import Login from '@/pages/Login';
 import Home from '@/pages/Home';
 import User from '@/pages/User';
 import Settings from '@/pages/Settings';
 import NotFound from '@/pages/404';
+import Admin from '@/pages/Admin';
+import Stock from '@/pages/Stock';
+import { hasMenuPermission } from '@/utils/permissionUtils';
 
 // 静态路由配置
 export const staticRoutes = [
   {
-    path: '/login',
-    Component: Login,
+    path: '/',
+    loader: () => redirect('/login'),
+    Component: null
   },
   {
-    path: '/',
-    Component: MainLayout,
-    children: [
-      {
-        path: 'home',
-        Component: Home,
-        meta: {
-          requiresAuth: true,
-          title: '首页',
-        },
-      },
-      {
-        path: 'user',
-        Component: User,
-        meta: {
-          requiresAuth: true,
-          title: '用户管理',
-        },
-      },
-      {
-        path: 'settings',
-        Component: Settings,
-        meta: {
-          requiresAuth: true,
-          title: '系统设置',
-        },
-      }
-    ],
+    path: '/login',
+    Component: Login,
   },
   {
     path: '*',
@@ -53,15 +31,57 @@ export const staticRoutes = [
 export const asyncRoutes = [
   // 这里可以添加需要根据权限动态加载的路由
   // 例如：
-  // {
-  //   path: '/admin',
-  //   Component: <Admin />,
-  //   meta: {
-  //     requiresAuth: true,
-  //     roles: ['admin'],
-  //     title: '管理员页面',
-  //   },
-  // },
+  {
+    path: '/',
+    Component: MainLayout,
+    children: [
+      {
+        path: 'home',
+        Component: Home,
+        meta: {
+          requiresAuth: true,
+          title: '首页',
+          roles: ['admin', 'user'], // 角色权限示例
+        },
+      },
+      {
+        path: 'user',
+        Component: User,
+        meta: {
+          requiresAuth: true,
+          title: '用户管理',
+          roles: ['admin', 'user'], // 角色权限示例
+        },
+      },
+      {
+        path: 'settings',
+        Component: Settings,
+        meta: {
+          requiresAuth: true,
+          title: '系统设置',
+          roles: ['admin', 'user'], // 角色权限示例
+        },
+      },
+       {
+        path: 'stock',
+        Component: Stock,
+        meta: {
+          requiresAuth: true,
+          title: '库存管理',
+          roles: ['admin', 'user'], // 角色权限示例
+        },
+      },
+      {
+        path: '/admin',
+        Component: Admin,
+        meta: {
+          requiresAuth: true,
+          roles: ['admin'],
+          title: '管理员页面',
+        },
+      },
+    ],
+  }
 ];
 
 // 根据用户角色过滤路由
@@ -72,7 +92,7 @@ export const filterAsyncRoutes = (routes: any[], roles: string[]) => {
     const tmp = { ...route };
     
     // 检查用户是否有权限访问该路由
-    if (hasPermission(roles, tmp)) {
+    if (hasMenuPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles);
       }
@@ -83,14 +103,6 @@ export const filterAsyncRoutes = (routes: any[], roles: string[]) => {
   return res;
 };
 
-// 检查用户是否有权限
-const hasPermission = (roles: string[], route: any) => {
-  if (route.meta && route.meta.roles) {
-    return roles.some(role => route.meta.roles.includes(role));
-  }
-  
-  // 如果路由没有设置roles，则所有人都可以访问
-  return true;
-};
+
 
 export default staticRoutes;

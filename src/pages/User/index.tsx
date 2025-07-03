@@ -165,11 +165,8 @@ const User: React.FC = () => {
     setModalTitle('编辑用户');
     setEditingId(record.id);
     form.setFieldsValue({
-      name: record.name,
-      email: record.email,
-      role: record.role,
-      status: record.status,
-    });
+      ...record
+  });
     setModalVisible(true);
   };
 

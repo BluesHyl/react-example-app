@@ -1,33 +1,40 @@
-import React from 'react';
+import React, { use } from 'react';
 import { Menu as AntdMenu } from 'antd';
 import { useNavigate, useLocation } from 'react-router';
+import { useMenu } from '@/hooks/useMenu';
 import {
   HomeOutlined,
   UserOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
+import { useUserStore } from '@/store/user';
+import { asyncRoutes, filterAsyncRoutes } from '@/router/index';
 
-const Menu: React.FC = () => {
+const Menu: React.FC = (props) => {
+  console.log('Menu props:', props);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const menuItems = [
-    {
-      key: '/home',
-      icon: <HomeOutlined />,
-      label: '首页',
-    },
-    {
-      key: '/user',
-      icon: <UserOutlined />,
-      label: '用户管理',
-    },
-    {
-      key: '/settings',
-      icon: <SettingOutlined />,
-      label: '系统设置',
-    },
-  ];
+  const { user } = useUserStore();
+  console.log('Current user:', user);
+  const { menuItems } = useMenu();
+  console.log('Menu items:', menuItems, asyncRoutes);
+  // [
+  //   {
+  //     key: '/home',
+  //     icon: <HomeOutlined />,
+  //     label: '首页',
+  //   },
+  //   {
+  //     key: '/user',
+  //     icon: <UserOutlined />,
+  //     label: '用户管理',
+  //   },
+  //   {
+  //     key: '/settings',
+  //     icon: <SettingOutlined />,
+  //     label: '系统设置',
+  //   },
+  // ];
 
   const handleMenuClick = ({ key }: { key: string }) => {
     navigate(key);
@@ -35,9 +42,9 @@ const Menu: React.FC = () => {
 
   return (
     <AntdMenu
-      theme="dark"
+      theme="light"
       mode="inline"
-      defaultSelectedKeys={[location.pathname]}
+      selectedKeys={props?.selectedKeys}
       items={menuItems}
       onClick={handleMenuClick}
     />

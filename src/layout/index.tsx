@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Button, Dropdown, Avatar, theme } from 'antd';
+import { Layout, Button, Dropdown, Avatar, theme } from 'antd';
 import { Outlet, useNavigate, useLocation } from 'react-router';
 import {
   MenuFoldOutlined,
@@ -10,7 +10,7 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import { useUserStore } from '@/store/user';
-
+import Menu from '@/layout/components/Menu'
 import withAuth from '@/utils/withAuth';
 
 const { Header, Sider } = Layout;
@@ -20,6 +20,7 @@ const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  console.log('location', location)
   const { user, clearUser } = useUserStore();
   const { token } = theme.useToken();
 
@@ -157,4 +158,4 @@ const MainLayout: React.FC = () => {
   );
 };
 
-export default withAuth(MainLayout);
+export default MainLayout;

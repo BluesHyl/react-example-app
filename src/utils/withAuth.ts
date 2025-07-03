@@ -49,6 +49,7 @@ const withAuth = <P extends object>(
     useEffect(() => {
       // 检查用户是否有权限
       const hasAuth = checkAuth(user);
+      console.log("用户权限检查结果:", hasAuth);
       setIsAuthorized(hasAuth);
       
       // 如果没有权限，重定向到登录页面

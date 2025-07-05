@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router';
 const fetchRoutes = (roles: string[]): Promise<any[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
+      console.log('asyncRoutes', asyncRoutes);
       // 根据角色过滤路由
       const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
       resolve(accessedRoutes);
@@ -96,7 +97,7 @@ const RouterGuard: React.FC = () => {
     };
     
     loadRoutes();
-  }, [user, location.pathname]);
+  }, [user]);
 
   const routeElements = useRoutes(routes);
 

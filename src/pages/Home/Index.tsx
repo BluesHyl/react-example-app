@@ -127,7 +127,7 @@ const Home: React.FC = () => {
     <div>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card loading={loading}>
+          <Card loading={loading} hoverable >
             <Statistic
               title="用户总数"
               value={1128}
@@ -137,7 +137,7 @@ const Home: React.FC = () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card loading={loading}>
+          <Card loading={loading} hoverable>
             <Statistic
               title="订单总数"
               value={93}
@@ -147,7 +147,7 @@ const Home: React.FC = () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card loading={loading}>
+          <Card loading={loading} hoverable>
             <Statistic
               title="文章总数"
               value={56}
@@ -157,7 +157,7 @@ const Home: React.FC = () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card loading={loading}>
+          <Card loading={loading} hoverable>
             <Statistic
               title="团队成员"
               value={12}

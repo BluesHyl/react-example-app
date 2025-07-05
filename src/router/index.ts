@@ -9,6 +9,8 @@ import NotFound from '@/pages/404';
 import Admin from '@/pages/Admin';
 import Stock from '@/pages/Stock';
 import { hasMenuPermission } from '@/utils/permissionUtils';
+import TodoList from '@/pages/TodoList';
+import PointerTransetion from '@/pages/PointerTransetion';
 
 // 静态路由配置
 export const staticRoutes = [
@@ -80,6 +82,24 @@ export const asyncRoutes = [
           title: '管理员页面',
         },
       },
+      {
+        path: 'todo-list',
+        Component: TodoList,
+        meta: {
+          requiresAuth: true,
+          title: 'Todo List',
+          roles: ['admin', 'user'],
+        },
+      },
+      {
+        path: 'pointer-transetion',
+        Component: PointerTransetion,
+        meta: {
+          requiresAuth: true,
+          title: 'Pointer Transition',
+          roles: ['admin', 'user'],
+        },
+      }
     ],
   }
 ];

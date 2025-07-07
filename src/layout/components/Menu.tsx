@@ -1,21 +1,16 @@
-import React, { use } from 'react';
+import React from 'react';
 import { Menu as AntdMenu } from 'antd';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useMenu } from '@/hooks/useMenu';
 import {
   HomeOutlined,
   UserOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { useUserStore } from '@/store/user';
-import { asyncRoutes, filterAsyncRoutes } from '@/router/index';
+import { asyncRoutes } from '@/router/index';
 
-const Menu: React.FC = (props) => {
-  console.log('Menu props:', props);
+const Menu: React.FC = (props:any) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useUserStore();
-  console.log('Current user:', user);
   const { menuItems } = useMenu();
   console.log('Menu items:', menuItems, asyncRoutes);
   // [

@@ -14,6 +14,16 @@ export interface RequestOptions {
   retryCount?: number;
   // 重试延迟(ms)
   retryDelay?: number;
+  // 是否取消重复请求
+  cancelDuplicated?: boolean;
+  // 是否开启防抖
+  debounce?: boolean;
+  // 防抖时间(ms)
+  debounceTime?: number;
+  // 是否开启节流
+  throttle?: boolean;
+  // 节流时间(ms)
+  throttleTime?: number;
 }
 
 // 后端响应数据结构
@@ -29,5 +39,5 @@ export type RequestMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 
 // 请求参数
 export interface RequestParams {
-  [key: string]: any;
-} 
+  [key: string]: any | undefined | null;
+}

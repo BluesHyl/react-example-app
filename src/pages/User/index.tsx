@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Table, Card, Button, Space, Modal, Form, Input, Select, message, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-
+import * as api from '@/api';
 interface UserType {
-  id: string;
+  _id?: string;
   name: string;
   email: string;
   role: string;
-  status: string;
-  createTime: string;
+  status?: string;
+  createTime?: string;
 }
 
 const User: React.FC = () => {
@@ -25,55 +25,20 @@ const User: React.FC = () => {
     fetchUserData();
   }, []);
 
-  const fetchUserData = () => {
+  const fetchUserData = async() => {
     setLoading(true);
-    // 模拟API请求
-    setTimeout(() => {
-      const mockData: UserType[] = [
-        {
-          id: '1',
-          name: '张三',
-          email: 'zhangsan@example.com',
-          role: 'admin',
-          status: 'active',
-          createTime: '2023-01-15 08:30:00',
-        },
-        {
-          id: '2',
-          name: '李四',
-          email: 'lisi@example.com',
-          role: 'editor',
-          status: 'active',
-          createTime: '2023-02-20 10:15:00',
-        },
-        {
-          id: '3',
-          name: '王五',
-          email: 'wangwu@example.com',
-          role: 'user',
-          status: 'inactive',
-          createTime: '2023-03-05 14:45:00',
-        },
-        {
-          id: '4',
-          name: '赵六',
-          email: 'zhaoliu@example.com',
-          role: 'user',
-          status: 'active',
-          createTime: '2023-04-10 09:20:00',
-        },
-      ];
-      setUserData(mockData);
+    const { users } = await api.getAllusers();
+    console.log(777, users)
+      setUserData(users);
       setLoading(false);
-    }, 1000);
   };
 
   // 表格列定义
   const columns: ColumnsType<UserType> = [
     {
       title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: '_id',
+      key: '_id',
       width: 80,
     },
     {
@@ -90,36 +55,36 @@ const User: React.FC = () => {
       title: '角色',
       dataIndex: 'role',
       key: 'role',
-      render: (role: string) => {
-        const roleMap: Record<string, { color: string; text: string }> = {
-          admin: { color: '#f50', text: '管理员' },
-          editor: { color: '#108ee9', text: '编辑者' },
-          user: { color: '#87d068', text: '普通用户' },
-        };
+      // render: (role: string) => {
+      //   const roleMap: Record<string, { color: string; text: string }> = {
+      //     admin: { color: '#f50', text: '管理员' },
+      //     editor: { color: '#108ee9', text: '编辑者' },
+      //     user: { color: '#87d068', text: '普通用户' },
+      //   };
         
-        return (
-          <span style={{ color: roleMap[role]?.color }}>
-            {roleMap[role]?.text || role}
-          </span>
-        );
-      },
+      //   return (
+      //     <span style={{ color: roleMap[role]?.color }}>
+      //       {roleMap[role]?.text || role}
+      //     </span>
+      //   );
+      // },
     },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => {
-        return status === 'active' ? (
-          <span className="text-green-500">启用</span>
-        ) : (
-          <span className="text-red-500">禁用</span>
-        );
-      },
-    },
+    // {
+    //   title: '状态',
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   render: (status: string) => {
+    //     return status === 'active' ? (
+    //       <span className="text-green-500">启用</span>
+    //     ) : (
+    //       <span className="text-red-500">禁用</span>
+    //     );
+    //   },
+    // },
     {
       title: '创建时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
     },
     {
       title: '操作',
@@ -135,7 +100,7 @@ const User: React.FC = () => {
           </Button>
           <Popconfirm
             title="确定要删除此用户吗？"
-            onConfirm={() => handleDelete(record.id)}
+            onConfirm={() => handleDelete(record._id)}
             okText="确定"
             cancelText="取消"
           >
@@ -163,7 +128,7 @@ const User: React.FC = () => {
   // 处理编辑用户
   const handleEdit = (record: UserType) => {
     setModalTitle('编辑用户');
-    setEditingId(record.id);
+    setEditingId(record._id);
     form.setFieldsValue({
       ...record
   });
@@ -172,17 +137,23 @@ const User: React.FC = () => {
 
   // 处理删除用户
   const handleDelete = (id: string) => {
-    setUserData(userData.filter(item => item.id !== id));
+    setUserData(userData.filter(item => item._id !== id));
     message.success('删除成功');
   };
 
+  const handleCreate = async(data) => { 
+    await api.createUser(data)
+    message.success('创建成功');
+  };
+
   // 处理表单提交
-  const handleSubmit = () => {
-    form.validateFields().then(values => {
+  const handleSubmit = async () => {
+    form.validateFields().then(async values => {
       if (editingId) {
         // 更新用户
+        await api.updateUser({ _id: editingId, ...values});
         setUserData(userData.map(item => 
-          item.id === editingId 
+          item._id === editingId 
             ? { 
                 ...item, 
                 name: values.name, 
@@ -194,15 +165,16 @@ const User: React.FC = () => {
         ));
         message.success('更新成功');
       } else {
+        console.log('添加用户');
         // 添加用户
         const newUser: UserType = {
-          id: (userData.length + 1).toString(),
           name: values.name,
           email: values.email,
           role: values.role,
           status: values.status,
-          createTime: new Date().toLocaleString(),
         };
+        await handleCreate(newUser)
+
         setUserData([...userData, newUser]);
         message.success('添加成功');
       }

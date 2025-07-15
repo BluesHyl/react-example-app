@@ -12,4 +12,13 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  server: {
+    proxy: {
+      '/react-admin-api': {
+        target: 'http://localhost:3000/api/v1',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/react-admin-api/, '/react-admin-api')
+      }
+    }
+  }
 })

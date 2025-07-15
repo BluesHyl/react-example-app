@@ -1,9 +1,11 @@
-import http from '@/http';
+import { post, get } from "@/http/service";
 
-const getUser = () => {
-    return http.get('/posts');
-};
+const login = (data: { email: string; password: string }) => post("/auth/login", data);
 
-export default {
-    getUser,
-};
+const getAllusers = () => get("/user/all");
+
+
+const createUser = (data) => post("/user/create", data);
+
+const updateUser = (data) => post("/user/update", data);
+export { login, getAllusers, updateUser, createUser };

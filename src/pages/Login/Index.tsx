@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation, Navigate  } from 'react-router';
-import { useUserStore } from '@/store/user';
+import { useUserStore } from '../../store/user';
+import * as API from '../../api/index';
 
 interface LoginForm {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -19,30 +20,17 @@ const Login: React.FC = () => {
     return <Navigate to="/home" replace />;
   }
 
-  // 模拟登录请求
-  const mockLogin = async (data: LoginForm): Promise<any> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // 模拟服务器响应
-        if (data.username === 'admin' && data.password === 'admin123') {
-          resolve({
-            id: '1',
-            username: 'admin',
-            roles: ['admin'],
-            token: 'mock-token-' + Date.now(),
-          });
-        } else {
-          throw new Error('用户名或密码错误');
-        }
-      }, 1000);
-    });
-  };
-
   const onFinish = async (values: LoginForm) => {
+    console.log(122)
     setLoading(true);
     try {
-      const user = await mockLogin(values);
-      setUser(user);
+      const res = await API.login(values);
+      console.log(res)
+      setUser({
+        ...res.user,
+        token: res.access_token,
+        roles: [res.user.role],
+      });
       message.success('登录成功');
       const path = location.state || '/home';
       navigate(path);
@@ -67,12 +55,12 @@ const Login: React.FC = () => {
           autoComplete="off"
           size="large"
           initialValues={{
-            username: 'admin',
+            email: 'admin',
             password: 'admin123',
           }}
         >
           <Form.Item
-            name="username"
+            name="email"
             rules={[{ required: true, message: '请输入用户名' }]}
           >
             <Input 
